@@ -1,4 +1,6 @@
 const allowedCors = [
+  'http://api.borove4ik-movies.nomoredomainsmonster.ru',
+  'https://api.borove4ik-movies.nomoredomainsmonster.ru',
   'http://localhost:3000',
   'https://localhost:3000',
   'http://127.0.0.1:3000',
