@@ -3,12 +3,16 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
+const statuses = require('./utils/statusCodes');
 const { signout, login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
 const { signUpValidation, signInValidation } = require('./middlewares/celebrateValidation');
 const MONGO_URL = require('./utils/env.config');
+
+const NotFoundError = require('./errors/notFound');
 
 const { PORT = 3000 } = process.env;
 const { DB_URL, NODE_ENV } = process.env;
@@ -37,8 +41,16 @@ app.post('/signup', signUpValidation, createUser);
 
 app.post('/signout', signout);
 
+// app.use((req, res) => {
+//   res.status(statuses.NOT_FOUND).send('Данный ресурс не найден');
+// });
+
+app.use(errors());
+
+app.all('*', auth, (req, res, next) => next(new NotFoundError('Запрашиваемый ресурс не найден')));
+
 app.listen(PORT, () => {
-  // console.log(`App listening on port ${PORT}`);
+  console.log(`App listening on port ${PORT}`);
 });
 
 app.use((err, req, res) => {

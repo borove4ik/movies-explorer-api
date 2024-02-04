@@ -57,7 +57,9 @@ module.exports.updateUser = async (req, res, next) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Не удалось обновить информацию'));
       }
-      return next(err);
+      if (err.codeName === 'DuplicateKey') {
+        return next(new BadRequestError('Такой email уже существует'));
+      } return next(err);
     });
 };
 

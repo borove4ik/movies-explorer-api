@@ -54,7 +54,7 @@ module.exports.createMovie = async (req, res, next) => {
 module.exports.deleteMovieById = async (req, res, next) => {
   const { movieId } = req.params;
   movie
-    .updateOne(
+    .deleteOne(
       { _id: movieId },
       {
         $set: {
