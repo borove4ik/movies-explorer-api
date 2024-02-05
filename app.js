@@ -41,10 +41,6 @@ app.post('/signup', signUpValidation, createUser);
 
 app.post('/signout', signout);
 
-// app.use((req, res) => {
-//   res.status(statuses.NOT_FOUND).send('Данный ресурс не найден');
-// });
-
 app.use(errors());
 
 app.all('*', auth, (req, res, next) => next(new NotFoundError('Запрашиваемый ресурс не найден')));
@@ -53,7 +49,7 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({
     message: !err.statusCode ? 'Ошибка на стороне сервера' : err.message,
   });
