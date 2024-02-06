@@ -57,8 +57,8 @@ module.exports.updateUser = async (req, res, next) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Не удалось обновить информацию'));
       }
-      if (err.codeName === 'DuplicateKey') {
-        return next(new BadRequestError('Такой email уже существует'));
+      if (err.code === 11000) {
+        return next(new MongoDuplicateConflict('Такой email уже существует'));
       } return next(err);
     });
 };

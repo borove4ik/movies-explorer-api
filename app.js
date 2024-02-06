@@ -11,6 +11,7 @@ const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
 const { signUpValidation, signInValidation } = require('./middlewares/celebrateValidation');
 const MONGO_URL = require('./utils/env.config');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const NotFoundError = require('./errors/notFound');
 
@@ -28,6 +29,8 @@ app.use(
   }),
 );
 
+app.use(requestLogger);
+
 mongoose.connect(NODE_ENV === 'production' ? DB_URL : MONGO_URL, {
   useNewUrlParser: true,
 });
@@ -42,6 +45,7 @@ app.post('/signup', signUpValidation, createUser);
 app.post('/signout', signout);
 
 app.use(errors());
+app.use(errorLogger);
 
 app.all('*', auth, (req, res, next) => next(new NotFoundError('Запрашиваемый ресурс не найден')));
 

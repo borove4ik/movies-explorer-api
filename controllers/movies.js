@@ -1,6 +1,8 @@
 const movie = require('../models/movie');
 const BadRequestError = require('../errors/badRequest');
 const statuses = require('../utils/statusCodes');
+const NotFoundError = require('../errors/notFound');
+const ForbiddenError = require('../errors/forbiddenError');
 
 module.exports.getMovies = async (req, res, next) => {
   try {
@@ -25,8 +27,8 @@ module.exports.createMovie = async (req, res, next) => {
     nameEN,
     thumbnail,
     movieId,
-    owner,
   } = req.body;
+  const owner = req.user._id;
   movie
     .create({
       country,
@@ -42,10 +44,11 @@ module.exports.createMovie = async (req, res, next) => {
       movieId,
       owner,
     })
+    .then((selectedMovie) => selectedMovie.populate('owner'))
     .then(() => res.status(statuses.OK_REQUEST).send({ message: 'Фильм добавлен' }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Не удалось добавить фильм'));
+        return next(new BadRequestError(err));
       }
       return next(err);
     });
@@ -53,15 +56,17 @@ module.exports.createMovie = async (req, res, next) => {
 
 module.exports.deleteMovieById = async (req, res, next) => {
   const { movieId } = req.params;
-  movie
-    .deleteOne(
-      { _id: movieId },
-      {
-        $set: {
-          owner: '',
-        },
-      },
-    )
+  movie.findById(movieId)
+    .orFail(new NotFoundError('Фильм не найден'))
+    .then((selectedMovie) => {
+      if (req.user._id !== selectedMovie.owner) {
+        next(new ForbiddenError('У вас нет прав на удаление данного фильма'));
+      }
+      return selectedMovie
+        .deleteOne(
+          { _id: movieId },
+        );
+    })
     .then(() => res.status(statuses.OK_REQUEST).send({ message: 'Фильм удалён' }))
     .catch((err) => {
       if (err.name === 'CastError') {
