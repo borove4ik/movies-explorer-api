@@ -4,9 +4,9 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const statuses = require('./utils/statusCodes');
 const { signout, login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const cors = require('./middlewares/corsHandler');
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
 const { signUpValidation, signInValidation } = require('./middlewares/celebrateValidation');
@@ -19,6 +19,7 @@ const { PORT = 3000 } = process.env;
 const { DB_URL, NODE_ENV } = process.env;
 
 const app = express();
+app.use(cors);
 
 app.use(express.json());
 app.use(cookieParser());

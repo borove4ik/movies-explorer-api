@@ -1,6 +1,8 @@
 const allowedCors = [
   'http://api.borove4ik-movies.nomoredomainsmonster.ru',
   'https://api.borove4ik-movies.nomoredomainsmonster.ru',
+  'http://borove4ik-movies.nomoredomainsmonster.ru',
+  'https://borove4ik-movies.nomoredomainsmonster.ru',
   'http://localhost:3000',
   'https://localhost:3000',
   'http://127.0.0.1:3000',
@@ -15,13 +17,17 @@ const allowedCors = [
   'https://84.201.154.246',
   'http://127.0.0.1:80',
   'https://127.0.0.1:80',
+  'http://localhost:3001',
+  'https://localhost:3001',
+  'http://127.0.0.1:3001',
+  'https://127.0.0.1:3001',
   '*',
 ];
 
 const cors = (req, res, next) => {
   const { origin } = req.headers;
   const { method } = req;
-  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS';
   const requestHeaders = req.headers['access-control-request-headers'];
   res.header('Access-Control-Allow-Credentials', true);
 
