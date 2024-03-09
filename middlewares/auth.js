@@ -7,9 +7,12 @@ const { JWT_SECRET_PRODUCTION, NODE_ENV } = process.env;
 module.exports = (req, res, next) => {
   let payload;
   try {
-    const { cookies } = req;
-    if ((cookies && cookies.jwt)) {
-      const token = cookies.jwt;
+    // const { cookies } = req;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if ((token)) {
+      // const token = cookies.jwt;
       payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET_PRODUCTION : JWT_SECRET_DEVELOPMENT);
       req.user = payload;
       next();

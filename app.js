@@ -54,7 +54,7 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.statusCode || 500).send({
     message: !err.statusCode ? 'Ошибка на стороне сервера' : err.message,
   });
