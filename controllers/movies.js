@@ -45,7 +45,7 @@ module.exports.createMovie = async (req, res, next) => {
       owner,
     })
     .then((selectedMovie) => selectedMovie.populate('owner'))
-    .then(() => res.status(statuses.OK_REQUEST).send({ message: 'Фильм добавлен' }))
+    .then((selectedMovie) => res.status(statuses.OK_REQUEST).send(selectedMovie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError(err));
