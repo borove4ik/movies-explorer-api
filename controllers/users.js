@@ -12,14 +12,20 @@ module.exports.createUser = async (req, res, next) => {
     name, email, password,
   } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
+
   return User
     .create({
       name, email, password: hashedPassword,
     })
-    .then((newUser) => res.status(statuses.CREATED).send({
-      name: newUser.name,
-      email: newUser.email,
-    }))
+    .then((newUser) => {
+      const token = generateToken({ _id: newUser._id });
+
+      return res.status(statuses.CREATED).send({
+        name: newUser.name,
+        email: newUser.email,
+        token,
+      });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Не удалось добавить пользователя'));
