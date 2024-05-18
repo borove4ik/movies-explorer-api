@@ -15,11 +15,6 @@ Movie Explorer - это веб-сервис, где можно искать фи
 * Remote virtual Machine (Yandex Cloud);
   
 
-  
-`npm install / npm i` — устанавливает зависимости
-`npm run start` — запускает сервер  
-`npm run dev` — запускает сервер с hot-reload
-
 Адрес репозитория: https://github.com/borove4ik/movies-explorer-api
 
 ## Ссылки на проект
