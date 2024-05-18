@@ -11,7 +11,7 @@ Movies Explorer - это веб-сервис, где можно искать ф�
 * MongoDB;
 * Mongoose;
 * Postman;
-* Remote virtual Machine (Yandex Cloud);
+* Remote virtual Machine (Yandex Cloud).
   
 
 Адрес репозитория: https://github.com/borove4ik/movies-explorer-api
